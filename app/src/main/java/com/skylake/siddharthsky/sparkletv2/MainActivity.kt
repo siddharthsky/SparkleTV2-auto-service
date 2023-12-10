@@ -69,7 +69,6 @@ class MainActivity : FragmentActivity() {
             )
             startActivity(playStoreIntent)
             showToast("App not installed: $packageName")
-            // You may handle this case differently, e.g., redirect to the app's store page
         }
     }
 
