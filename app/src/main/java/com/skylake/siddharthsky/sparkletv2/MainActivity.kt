@@ -1,6 +1,8 @@
 package com.skylake.siddharthsky.sparkletv2
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
@@ -10,25 +12,42 @@ import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
 
+
 class MainActivity : FragmentActivity() {
+
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        // Check if the site is up or down
-        CheckSiteStatusTask().execute()
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+
+        if (savedInstanceState == null) {
+            if (isAppSaved()) {
+                // If an app is saved, open it directly
+                CheckSiteStatusTask().execute()
+            } else {
+                // If no app is saved, open the InstalledAppsFragment
+                openInstalledAppsFragment()
+                finish()
+            }
+        }
     }
 
+
     private inner class CheckSiteStatusTask : AsyncTask<Void, Void, Boolean>() {
+
         override fun doInBackground(vararg params: Void?): Boolean {
             return isSiteReachable("localhost", 5004, 2000)
         }
 
         override fun onPostExecute(result: Boolean) {
             if (result) {
+                println("Hello World tv2")
                 showToast("Server is up ⬆️")
                 showToast("Starting Sparkle-TV2")
-                openApp("se.hedekonsult.sparkle")
+                openSavedApp()
                 // Finish the current activity (close the main app)
                 finish()
             } else {
@@ -41,12 +60,14 @@ class MainActivity : FragmentActivity() {
 
                 showToast("Starting Sparkle-TV2")
 
-                openApp("se.hedekonsult.sparkle")
+                openSavedApp()
                 // Finish the current activity (close the main app)
                 finish()
             }
         }
     }
+
+
 
     private fun isSiteReachable(host: String, port: Int, timeout: Int): Boolean {
         return try {
@@ -59,26 +80,47 @@ class MainActivity : FragmentActivity() {
         }
     }
 
-    private fun openApp(packageName: String) {
-        val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
-        if (launchIntent != null) {
-            startActivity(launchIntent)
-        } else {
-            // If the app is not installed, open its page on the Google Play Store
-            val playStoreIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("market://details?id=$packageName")
-            )
-            startActivity(playStoreIntent)
-            showToast("App not installed: $packageName")
-        }
-    }
-
-
 
     private fun showToast(message: String) {
         runOnUiThread {
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
         }
     }
+
+
+    private fun isAppSaved(): Boolean {
+        val savedAppName = sharedPreferences.getString("NAMEDR", null)
+        return !savedAppName.isNullOrEmpty()
+    }
+
+    private fun openSavedApp() {
+        val savedAppName = sharedPreferences.getString("NAMEDR", null)
+        savedAppName?.let {
+            openApp(it)
+        }
+    }
+
+    private fun openInstalledAppsFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_browse_fragment, InstalledAppsFragment())
+            .commitNow()
+    }
+
+
+    private fun openApp(pkgName: String) {
+        val launchIntent = packageManager.getLaunchIntentForPackage(pkgName)
+        println(launchIntent)
+        println(pkgName)
+        if (launchIntent != null) {
+            startActivity(launchIntent)
+        } else {
+            val playStoreIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=$packageName")
+            )
+            startActivity(playStoreIntent)
+        }
+    }
+
 }
+

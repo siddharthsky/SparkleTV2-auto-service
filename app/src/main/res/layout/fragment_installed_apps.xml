@@ -1,0 +1,5 @@
+<!-- res/layout/fragment_installed_apps.xml -->
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/appListView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
