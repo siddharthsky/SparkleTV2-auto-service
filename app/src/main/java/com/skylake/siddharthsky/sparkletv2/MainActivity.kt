@@ -1,12 +1,9 @@
 package com.skylake.siddharthsky.sparkletv2
 
-import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import java.io.IOException
@@ -24,24 +21,29 @@ class MainActivity : FragmentActivity() {
 
     private inner class CheckSiteStatusTask : AsyncTask<Void, Void, Boolean>() {
         override fun doInBackground(vararg params: Void?): Boolean {
-            return isSiteReachable("localhost", 5001, 2000)
+            return isSiteReachable("localhost", 5004, 2000)
         }
 
         override fun onPostExecute(result: Boolean) {
             if (result) {
-                showToast("Site is up")
+                showToast("Server is up ⬆️")
+                showToast("Starting Sparkle-TV2")
                 openApp("se.hedekonsult.sparkle")
+                // Finish the current activity (close the main app)
+                finish()
             } else {
-                showToast("Site is down")
+                showToast("Server is down ⬇️")
 
                 openApp("com.termux")
 
                 // Wait for another 5.5 seconds before opening the second app
                 Thread.sleep(5000)
 
-                showToast("Site is up OOOOO?")
+                showToast("Starting Sparkle-TV2")
 
                 openApp("se.hedekonsult.sparkle")
+                // Finish the current activity (close the main app)
+                finish()
             }
         }
     }
