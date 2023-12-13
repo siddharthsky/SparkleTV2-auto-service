@@ -62,7 +62,7 @@ class MainActivity : FragmentActivity() {
 
                 openSavedApp()
                 // Finish the current activity (close the main app)
-                finish()
+                //finish()
             }
         }
     }
