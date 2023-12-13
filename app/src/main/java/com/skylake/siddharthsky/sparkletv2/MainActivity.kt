@@ -38,14 +38,13 @@ class MainActivity : FragmentActivity() {
 
     private inner class CheckSiteStatusTask : AsyncTask<Void, Void, Boolean>() {
 
-        // Wait for 2 seconds to check server status
+        // Wait for 1 seconds to check server status
         override fun doInBackground(vararg params: Void?): Boolean {
-            return isSiteReachable("localhost", 5001, 2000)
+            return isSiteReachable("localhost", 5001, 100)
         }
 
         override fun onPostExecute(result: Boolean) {
             if (result) {
-                println("Hello World tv2")
                 showToast("Server is up ⬆️")
                 showToast("Starting Sparkle-TV2")
                 openSavedApp()
@@ -95,8 +94,8 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun openSavedApp() {
-        val savedAppName = sharedPreferences.getString("savedAPP", null)
-        savedAppName?.let {
+        val savedApp= sharedPreferences.getString("savedAPP", null)
+        savedApp?.let {
             openApp(it)
         }
     }
@@ -110,7 +109,6 @@ class MainActivity : FragmentActivity() {
 
     private fun openApp(pkgName: String) {
         val launchIntent = packageManager.getLaunchIntentForPackage(pkgName)
-        println(launchIntent)
         println(pkgName)
         if (launchIntent != null) {
             startActivity(launchIntent)

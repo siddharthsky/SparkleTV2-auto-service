@@ -41,14 +41,14 @@ class InstalledAppsFragment : Fragment() {
         appListView.setOnItemClickListener { _, _, position, _ ->
             val selectedApp = installedApps[position]
             val pkgName = selectedApp.packageName
-            val appName = selectedApp.appName
+            val appNamex = selectedApp.appName
 
             // Save
             saveAppNameToSharedPreferences(pkgName)
 
 
             // Show a toast notification
-            Toast.makeText(requireContext(), "App saved: $appName", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "App saved: $appNamex", Toast.LENGTH_SHORT).show()
 
             //Debug Open app
             //openApp(selectedApp.packageName)
@@ -59,11 +59,13 @@ class InstalledAppsFragment : Fragment() {
         }
     }
 
-    private fun saveAppNameToSharedPreferences(appName: String) {
+    private fun saveAppNameToSharedPreferences(pkgName: String) {
         val editor = sharedPreferences.edit()
-        editor.putString("savedAPP", appName)
+        editor.putString("savedAPP", pkgName)
         editor.apply()
     }
+
+
 
     private fun openApp(packageName: String) {
         val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
