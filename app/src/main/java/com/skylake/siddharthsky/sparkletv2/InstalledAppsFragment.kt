@@ -1,20 +1,18 @@
 package com.skylake.siddharthsky.sparkletv2
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 class InstalledAppsFragment : Fragment() {
@@ -43,18 +41,27 @@ class InstalledAppsFragment : Fragment() {
         appListView.setOnItemClickListener { _, _, position, _ ->
             val selectedApp = installedApps[position]
             val pkgName = selectedApp.packageName
+            val appName = selectedApp.appName
 
             // Save
             saveAppNameToSharedPreferences(pkgName)
 
+
+            // Show a toast notification
+            Toast.makeText(requireContext(), "App saved: $appName", Toast.LENGTH_SHORT).show()
+
+            //Debug Open app
             //openApp(selectedApp.packageName)
+
+            // Close the entire app
+            requireActivity().finish()
 
         }
     }
 
     private fun saveAppNameToSharedPreferences(appName: String) {
         val editor = sharedPreferences.edit()
-        editor.putString("NAMEDR", appName)
+        editor.putString("savedAPP", appName)
         editor.apply()
     }
 

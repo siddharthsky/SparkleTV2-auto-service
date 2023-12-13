@@ -30,7 +30,7 @@ class MainActivity : FragmentActivity() {
             } else {
                 // If no app is saved, open the InstalledAppsFragment
                 openInstalledAppsFragment()
-                finish()
+
             }
         }
     }
@@ -38,8 +38,9 @@ class MainActivity : FragmentActivity() {
 
     private inner class CheckSiteStatusTask : AsyncTask<Void, Void, Boolean>() {
 
+        // Wait for 2 seconds to check server status
         override fun doInBackground(vararg params: Void?): Boolean {
-            return isSiteReachable("localhost", 5004, 2000)
+            return isSiteReachable("localhost", 5001, 2000)
         }
 
         override fun onPostExecute(result: Boolean) {
@@ -55,8 +56,8 @@ class MainActivity : FragmentActivity() {
 
                 openApp("com.termux")
 
-                // Wait for another 5.5 seconds before opening the second app
-                Thread.sleep(5000)
+                // Wait for 5.5 seconds before opening the second app
+                Thread.sleep(5500)
 
                 showToast("Starting Sparkle-TV2")
 
@@ -89,12 +90,12 @@ class MainActivity : FragmentActivity() {
 
 
     private fun isAppSaved(): Boolean {
-        val savedAppName = sharedPreferences.getString("NAMEDR", null)
+        val savedAppName = sharedPreferences.getString("savedAPP", null)
         return !savedAppName.isNullOrEmpty()
     }
 
     private fun openSavedApp() {
-        val savedAppName = sharedPreferences.getString("NAMEDR", null)
+        val savedAppName = sharedPreferences.getString("savedAPP", null)
         savedAppName?.let {
             openApp(it)
         }
