@@ -1,6 +1,7 @@
 package com.skylake.siddharthsky.sparkletv2
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
@@ -46,12 +47,14 @@ class InstalledAppsFragment : Fragment() {
             // Save
             saveAppNameToSharedPreferences(pkgName)
 
-
             // Show a toast notification
             Toast.makeText(requireContext(), "App saved: $appNamex", Toast.LENGTH_SHORT).show()
 
             //Debug Open app
             //openApp(selectedApp.packageName)
+
+            // Launch MainActivity
+            launchMainActivity()
 
             // Close the entire app
             requireActivity().finish()
@@ -83,8 +86,17 @@ class InstalledAppsFragment : Fragment() {
             val packageName = packageInfo.packageName
             apps.add(AppInfo(appName, appIcon, packageName))
         }
+
+        apps.sortBy { it.appName }
+
         return apps
     }
+
+    private fun launchMainActivity() {
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        startActivity(intent)
+    }
+
 
     private class AppAdapter(context: Context, apps: List<AppInfo>) :
         ArrayAdapter<AppInfo>(context, R.layout.item_installed_app, apps) {
