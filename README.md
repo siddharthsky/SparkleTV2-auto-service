@@ -1,19 +1,20 @@
-# Sparkle-TV2
+# Sparkle-TV2 ✨📺
 
 This Android app serves as an opener for the IPTV player installed by the user after running Termux.
 
-## Overview
+## Overview 🌐
 
 The app is designed to check if a server is running successfully on Termux at `localhost:5001`. If the server is running, the app opens the user's installed IPTV player.
 
-## Features
+## Features 🚀
 
-- Checks for the running server on Termux.
-- Opens the installed IPTV player if the server is running.
-- Simplifies the process of launching the IPTV player after setting up the server on Termux.
-- If the server is already running, it just opens the configured IPTV player.
+- ✔️ Checks for the running server on Termux.
+- ▶️ Opens the installed IPTV player if the server is running.
+- 🚀 Simplifies the process of launching the IPTV player after setting up the server on Termux.
+- ▶️ If the server is already running, it just opens the configured IPTV player.
 
-## How to Use
+
+## How to Use 📲
 
 1. Ensure you have [Termux](https://github.com/termux/termux-app) installed on your Android device.
 2. Configure Termux autostart via `bash.bashrc`:
@@ -35,7 +36,7 @@ The app is designed to check if a server is running successfully on Termux at `l
 
 6. If you want to choose another app, clear the app data to reset.
 
-## Dependencies
+## Dependencies 🛠️
 
 - Termux (for running the server)
 - Server configured with autostart
@@ -45,7 +46,7 @@ The app is designed to check if a server is running successfully on Termux at `l
 - IPTV player with playlist [playstore](https://play.google.com/store/search?q=iptv+player&c=apps)
 
 
-## Acknowledgements
+## Acknowledgements 🙌
 
 - [Termux](https://github.com/termux) 
 - [rabilrbl](https://github.com/rabilrbl)
