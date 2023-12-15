@@ -43,5 +43,9 @@ The app is designed to check if a server is running successfully on Termux at `l
   - J-TV self server NPM by [dhruv-2015](https://github.com/dhruv-2015/JIOTVServer)
   - TS-JioTV server NPM by [mitthu786](https://github.com/mitthu786/TS-JioTV)
 
+## Acknowledgements
 
-
+- [Termux](https://github.com/termux) 
+- [rabilrbl](https://github.com/rabilrbl)
+- [dhruv-2015](https://github.com/dhruv-2015)
+- [mitthu786](https://github.com/mitthu786)
