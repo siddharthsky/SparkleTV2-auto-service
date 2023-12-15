@@ -1,6 +1,6 @@
 # Sparkle-TV2
 
-This Android app serves as an opener for the IPTV player installed by the user after running a server on Termux.
+This Android app serves as an opener for the IPTV player installed by the user after running Termux.
 
 ## Overview
 
