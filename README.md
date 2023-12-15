@@ -11,6 +11,7 @@ The app is designed to check if a server is running successfully on Termux at `l
 - Checks for the running server on Termux.
 - Opens the installed IPTV player if the server is running.
 - Simplifies the process of launching the IPTV player after setting up the server on Termux.
+- If the server is already running, it just opens the configured IPTV player.
 
 ## How to Use
 
@@ -34,7 +35,6 @@ The app is designed to check if a server is running successfully on Termux at `l
 
 6. If you want to choose another app, clear the app data to reset.
 
-
 ## Dependencies
 
 - Termux (for running the server)
@@ -42,6 +42,8 @@ The app is designed to check if a server is running successfully on Termux at `l
   - JioTV GO server by [rabilrbl](https://github.com/rabilrbl/jiotv_go) ([recommended](https://rabilrbl.github.io/jiotv_go/Usage-Guide/#android-users-weve-got-you-covered))
   - J-TV self server NPM by [dhruv-2015](https://github.com/dhruv-2015/JIOTVServer)
   - TS-JioTV server NPM by [mitthu786](https://github.com/mitthu786/TS-JioTV)
+- IPTV player with playlist [playstore](https://play.google.com/store/search?q=iptv+player&c=apps)
+
 
 ## Acknowledgements
 
