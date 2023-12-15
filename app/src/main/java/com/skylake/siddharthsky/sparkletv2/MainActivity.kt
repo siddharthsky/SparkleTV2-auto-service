@@ -40,13 +40,13 @@ class MainActivity : FragmentActivity() {
 
         // Wait for 1 seconds to check server status
         override fun doInBackground(vararg params: Void?): Boolean {
-            return isSiteReachable("localhost", 5001, 100)
+            return isSiteReachable("localhost", 5004, 100)
         }
 
         override fun onPostExecute(result: Boolean) {
             if (result) {
                 showToast("Server is up ⬆️")
-                showToast("Starting Sparkle-TV2")
+                showToast("Starting TV2")
                 openSavedApp()
                 // Finish the current activity (close the main app)
                 finish()
@@ -58,11 +58,11 @@ class MainActivity : FragmentActivity() {
                 // Wait for 5.5 seconds before opening the second app
                 Thread.sleep(5500)
 
-                showToast("Starting Sparkle-TV2")
+                showToast("Starting TV2")
 
                 openSavedApp()
                 // Finish the current activity (close the main app)
-                //finish()
+                finish()
             }
         }
     }
