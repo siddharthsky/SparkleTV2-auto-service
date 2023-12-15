@@ -36,6 +36,11 @@ The app is designed to check if a server is running successfully on Termux at `l
 
 6. If you want to choose another app, clear the app data to reset.
 
+## Download ⬇️
+
+[<img src="https://i.imgur.com/GTVknqJt.jpg">](https://github.com/siddharthsky/SparkleTV2-auto-service/releases)
+
+
 ## Dependencies 🛠️
 
 - Termux (for running the server)
