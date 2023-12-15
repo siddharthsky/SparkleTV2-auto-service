@@ -40,7 +40,7 @@ class MainActivity : FragmentActivity() {
 
         // Wait for 1 seconds to check server status
         override fun doInBackground(vararg params: Void?): Boolean {
-            return isSiteReachable("localhost", 5004, 100)
+            return isSiteReachable("localhost", 5001, 100)
         }
 
         override fun onPostExecute(result: Boolean) {

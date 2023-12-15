@@ -11,8 +11,8 @@ android {
         applicationId = "com.skylake.siddharthsky.sparkletv2"
         minSdk = 21
         targetSdk = 33
-        versionCode = 3
-        versionName = "2.1"
+        versionCode = 4
+        versionName = "2.2"
 
     }
 
