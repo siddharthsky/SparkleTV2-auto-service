@@ -47,13 +47,16 @@ The app is designed to check if a server is running successfully on Termux at `l
 - Server configured with autostart
   - JioTV GO server by [rabilrbl](https://github.com/rabilrbl/jiotv_go) ([recommended](https://rabilrbl.github.io/jiotv_go/Usage-Guide/#android-users-weve-got-you-covered))
   - J-TV self server NPM by [dhruv-2015](https://github.com/dhruv-2015/JIOTVServer)
+  <!-- 
   - TS-JioTV server NPM by [mitthu786](https://github.com/mitthu786/TS-JioTV)
-- IPTV player with playlist [playstore](https://play.google.com/store/search?q=iptv+player&c=apps)
-
+<!-- - IPTV player with playlist [playstore](https://play.google.com/store/search?q=iptv+player&c=apps)
+-->
 
 ## Acknowledgements 🙌
 
 - [Termux](https://github.com/termux) 
 - [rabilrbl](https://github.com/rabilrbl)
+<!-- 
 - [dhruv-2015](https://github.com/dhruv-2015)
-- [mitthu786](https://github.com/mitthu786)
+- [mitthu786](https://github.com/mitthu786) 
+--> 
