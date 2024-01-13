@@ -44,7 +44,7 @@ The app is designed to check if a server is running successfully on Termux at `l
 ## Dependencies 🛠️
 
 - Termux (for running the server)
-- Server configured with autostart
+- Server configured with autostart [any one]
   - JioTV GO server by [rabilrbl](https://github.com/rabilrbl/jiotv_go) ([recommended](https://rabilrbl.github.io/jiotv_go/Usage-Guide/#android-users-weve-got-you-covered))
   - J-TV self server NPM by [dhruv-2015](https://github.com/dhruv-2015/JIOTVServer)
   <!-- 
