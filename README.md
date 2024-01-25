@@ -28,7 +28,7 @@ The app is designed to check if a server is running successfully on Termux at `l
 
         ```bash
         termux-wake-lock
-        /data/data/com.termux/files/home/.jiotv_go/bin/jiotv_go run -P
+        $HOME/.jiotv_go/bin/jiotv_go run -P
         ```
     - Save and exit.
 
