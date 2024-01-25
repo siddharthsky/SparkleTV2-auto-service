@@ -27,7 +27,8 @@ The app is designed to check if a server is running successfully on Termux at `l
     - Add the line at end of file to start your JioTV server.
 
         ```bash
-        jiotv_go run -P
+        termux-wake-lock
+        /data/data/com.termux/files/home/.jiotv_go/bin/jiotv_go run -P
         ```
     - Save and exit.
 
