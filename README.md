@@ -24,8 +24,11 @@ The app is designed to check if a server is running successfully on Termux at `l
         ```bash
         nano $PREFIX/etc/bash.bashrc
         ```
-    - Add the command to start your JioTV server (e.g., `./jiotv_go.sh run ":5001"` - for JioTV GO server) at the end of the file.
-    - Server running at "localhost:5001" are supported.
+    - Add the line at end of file to start your JioTV server.
+
+        ```bash
+        jiotv_go run -a "--public"
+        ```
     - Save and exit.
 
 3. Select the installed IPTV player app on your device.
@@ -35,6 +38,10 @@ The app is designed to check if a server is running successfully on Termux at `l
 5. If the server is running successfully, the app will open the installed IPTV player.
 
 6. If you want to choose another app, clear the app data to reset.
+
+
+> [!NOTE]  
+> Server running at "localhost:5001" are supported.
 
 ## Download ⬇️
 
