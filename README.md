@@ -24,7 +24,7 @@ The app is designed to check if a server is running successfully on Termux at `l
         ```bash
         nano $PREFIX/etc/bash.bashrc
         ```
-    - Add the line at end of file to start your JioTV server.
+    - Add the line at end of file.
 
         ```bash
         termux-wake-lock
