@@ -16,7 +16,7 @@ The app is designed to check if a server is running successfully on Termux at `l
 
 ## How to Use 📲
 
-1. Ensure you have [Termux](https://github.com/termux/termux-app) installed and Done [JioTV](https://github.com/termux/termux-app](https://jiotv_go.rabil.me/get_started) server setup. 
+1. Ensure you have [Termux](https://github.com/termux/termux-app) installed and Done [JioTV](https://jiotv_go.rabil.me/get_started) server setup. 
 2. Configure Termux autostart via `bash.bashrc`:
     - Open Termux.
     - Edit `bash.bashrc` using a text editor like nano:
