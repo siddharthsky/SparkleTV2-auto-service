@@ -38,7 +38,6 @@ class MainActivity : FragmentActivity() {
 
     private inner class CheckSiteStatusTask : AsyncTask<Void, Void, Boolean>() {
 
-        // Wait for 1 seconds to check server status
         override fun doInBackground(vararg params: Void?): Boolean {
             return isSiteReachable("localhost", 5001, 100)
         }
@@ -48,7 +47,7 @@ class MainActivity : FragmentActivity() {
                 showToast("Server is up ⬆️")
                 showToast("Starting TV2")
                 openSavedApp()
-                // Finish the current activity (close the main app)
+                // Finish the current activity (exiting sparkletv2 after opening only IPTV)
                 finish()
             } else {
                 showToast("Server is down ⬇️")
@@ -61,7 +60,8 @@ class MainActivity : FragmentActivity() {
                 showToast("Starting TV2")
 
                 openSavedApp()
-                // Finish the current activity (close the main app)
+
+                // Finish the current activity (exiting sparkletv2 after opening T+IPTV)
                 finish()
             }
         }
