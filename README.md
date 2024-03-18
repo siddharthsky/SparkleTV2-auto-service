@@ -42,7 +42,7 @@ The app is designed to check if a server is running successfully on Termux at `l
 
 
 > [!NOTE]  
-> Server running at "localhost:5001" are supported.
+> Server running at "localhost:5001" is supported.
 
 ## Download ⬇️
 
