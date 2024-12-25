@@ -9,7 +9,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
@@ -17,17 +20,20 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 class InstalledAppsFragment : Fragment() {
-
-    private lateinit var appListView: ListView
-    private lateinit var packageManager: PackageManager
-    private lateinit var sharedPreferences: SharedPreferences
+    private var appListView: ListView? = null
+    private var packageManager: PackageManager? = null
+    private var sharedPreferences: SharedPreferences? = null
+    private var firstSelectedApp: String? = null
+    private var delayInput: EditText? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_installed_apps, container, false)
         appListView = view.findViewById(R.id.appListView)
+        delayInput = view.findViewById<EditText>(R.id.delayInput)
         packageManager = requireContext().packageManager
         sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         return view
@@ -35,86 +41,96 @@ class InstalledAppsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val installedApps = getInstalledApps()
+        val installedApps =
+            installedApps
         val adapter = AppAdapter(requireContext(), installedApps)
-        appListView.adapter = adapter
+        appListView!!.adapter = adapter
 
-        appListView.setOnItemClickListener { _, _, position, _ ->
-            val selectedApp = installedApps[position]
-            val pkgName = selectedApp.packageName
-            val appNamex = selectedApp.appName
-
-            // Save
-            saveAppNameToSharedPreferences(pkgName)
-
-            // Show a toast notification
-            Toast.makeText(requireContext(), "App saved: $appNamex", Toast.LENGTH_SHORT).show()
-
-            //Debug Open app
-            //openApp(selectedApp.packageName)
-
-            // Launch MainActivity
-            launchMainActivity()
-
-            // Close the entire app
-            requireActivity().finish()
-
-        }
+        appListView!!.onItemClickListener =
+            OnItemClickListener { parent: AdapterView<*>?, view1: View?, position: Int, id: Long ->
+                val selectedApp =
+                    installedApps[position]
+                val pkgName = selectedApp.packageName
+                val appName = selectedApp.appName
+                if (firstSelectedApp == null) {
+                    firstSelectedApp = pkgName
+                    Toast.makeText(
+                        requireContext(),
+                        "First app selected: $appName",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    var delay = try {
+                        delayInput!!.text.toString().toInt() * 1000
+                    } catch (e: NumberFormatException) {
+                        2000 // Default to 2 seconds
+                    }
+                    saveAppsToSharedPreferences(firstSelectedApp!!, pkgName, delay)
+                    Toast.makeText(
+                        requireContext(),
+                        "Second app selected: $appName",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    launchMainActivity()
+                    requireActivity().finish()
+                }
+            }
     }
 
-    private fun saveAppNameToSharedPreferences(pkgName: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString("savedAPP", pkgName)
+    private fun saveAppsToSharedPreferences(firstApp: String, secondApp: String, delay: Int) {
+        val editor = sharedPreferences!!.edit()
+        editor.putString("firstApp", firstApp)
+        editor.putString("secondApp", secondApp)
+        editor.putInt("delay", delay)
         editor.apply()
     }
 
+    private val installedApps: List<AppInfo>
+        get() {
+            val apps: MutableList<AppInfo> = ArrayList()
+            val packageList = packageManager!!.getInstalledPackages(PackageManager.GET_META_DATA)
+            for (packageInfo in packageList) {
+                val appName =
+                    packageManager!!.getApplicationLabel(packageInfo.applicationInfo).toString()
+                val appIcon = packageManager!!.getApplicationIcon(packageInfo.applicationInfo)
+                val packageName = packageInfo.packageName
+                apps.add(AppInfo(appName, appIcon, packageName))
+            }
 
-
-    private fun openApp(packageName: String) {
-        val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
-        launchIntent?.let {
-            startActivity(it)
+            apps.sortWith(java.util.Comparator { app1: AppInfo, app2: AppInfo ->
+                app1.appName.compareTo(
+                    app2.appName
+                )
+            })
+            return apps
         }
-    }
-
-    private fun getInstalledApps(): List<AppInfo> {
-        val apps = mutableListOf<AppInfo>()
-        val packageList = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
-        for (packageInfo in packageList) {
-            val appName = packageManager.getApplicationLabel(packageInfo.applicationInfo).toString()
-            val appIcon = packageManager.getApplicationIcon(packageInfo.applicationInfo)
-            val packageName = packageInfo.packageName
-            apps.add(AppInfo(appName, appIcon, packageName))
-        }
-
-        apps.sortBy { it.appName }
-
-        return apps
-    }
 
     private fun launchMainActivity() {
         val intent = Intent(requireContext(), MainActivity::class.java)
         startActivity(intent)
     }
 
-
-    private class AppAdapter(context: Context, apps: List<AppInfo>) :
-        ArrayAdapter<AppInfo>(context, R.layout.item_installed_app, apps) {
-
+    private class AppAdapter(context: Context?, apps: List<AppInfo>?) :
+        ArrayAdapter<AppInfo?>(
+            context!!, R.layout.item_installed_app,
+            apps!!
+        ) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view: View = convertView
-                ?: LayoutInflater.from(context).inflate(R.layout.item_installed_app, parent, false)
+            val view = convertView
+                ?: LayoutInflater.from(
+                    context
+                ).inflate(R.layout.item_installed_app, parent, false)
 
             val appInfo = getItem(position)
-            val appNameTextView: TextView = view.findViewById(R.id.appNameTextView)
-            val appIconImageView: ImageView = view.findViewById(R.id.appIconImageView)
+            val appNameTextView = view.findViewById<TextView>(R.id.appNameTextView)
+            val appIconImageView = view.findViewById<ImageView>(R.id.appIconImageView)
 
-            appNameTextView.text = appInfo?.appName
+            appNameTextView.text = appInfo?.appName ?: ""
             appIconImageView.setImageDrawable(appInfo?.appIcon)
 
             return view
         }
     }
 
-    private data class AppInfo(val appName: String, val appIcon: Drawable, val packageName: String)
+    private class AppInfo(val appName: String, val appIcon: Drawable, val packageName: String)
 }
