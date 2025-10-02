@@ -3,8 +3,10 @@ package com.skylake.siddharthsky.sparkletv2
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -79,7 +81,12 @@ class InstalledAppsFragment : Fragment() {
 
     private fun getInstalledApps(): List<AppInfo> {
         val apps = mutableListOf<AppInfo>()
-        val packageList = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
+        val packageList: List<PackageInfo> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(PackageManager.GET_META_DATA.toLong()))
+        } else {
+            packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
+        }
+
         for (packageInfo in packageList) {
             val appName = packageManager.getApplicationLabel(packageInfo.applicationInfo).toString()
             val appIcon = packageManager.getApplicationIcon(packageInfo.applicationInfo)
@@ -88,7 +95,6 @@ class InstalledAppsFragment : Fragment() {
         }
 
         apps.sortBy { it.appName }
-
         return apps
     }
 

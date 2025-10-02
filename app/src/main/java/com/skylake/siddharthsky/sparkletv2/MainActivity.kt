@@ -4,14 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
-
 
 class MainActivity : FragmentActivity() {
 
@@ -25,79 +28,55 @@ class MainActivity : FragmentActivity() {
 
         if (savedInstanceState == null) {
             if (isAppSaved()) {
-                // If an app is saved, open it directly
-                CheckSiteStatusTask().execute()
+                lifecycleScope.launch {
+                    checkServerAndLaunchApps()
+                }
             } else {
-                // If no app is saved, open the InstalledAppsFragment
                 openInstalledAppsFragment()
-
             }
         }
     }
 
-
-    private inner class CheckSiteStatusTask : AsyncTask<Void, Void, Boolean>() {
-
-        override fun doInBackground(vararg params: Void?): Boolean {
-            return isSiteReachable("localhost", 5001, 100)
-        }
-
-        override fun onPostExecute(result: Boolean) {
-            if (result) {
+    private suspend fun checkServerAndLaunchApps() = withContext(Dispatchers.IO) {
+        val serverUp = isSiteReachable("localhost", 5001, 100)
+        withContext(Dispatchers.Main) {
+            if (serverUp) {
                 showToast("Server is up ⬆️")
                 showToast("Starting TV2")
                 openSavedApp()
-                // Finish the current activity (exiting sparkletv2 after opening only IPTV)
                 finish()
             } else {
                 showToast("Server is down ⬇️")
-
                 openApp("com.termux")
-
-                // Wait for 5.5 seconds before opening the second app
-                Thread.sleep(5500)
-
+                delay(5500)
                 showToast("Starting TV2")
-
                 openSavedApp()
-
-                // Finish the current activity (exiting sparkletv2 after opening T+IPTV)
                 finish()
             }
         }
     }
 
-
-
     private fun isSiteReachable(host: String, port: Int, timeout: Int): Boolean {
         return try {
-            val socket = Socket()
-            socket.connect(InetSocketAddress(host, port), timeout)
-            socket.close()
+            Socket().use { socket ->
+                socket.connect(InetSocketAddress(host, port), timeout)
+            }
             true
         } catch (e: IOException) {
             false
         }
     }
 
-
     private fun showToast(message: String) {
-        runOnUiThread {
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-        }
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 
-
     private fun isAppSaved(): Boolean {
-        val savedAppName = sharedPreferences.getString("savedAPP", null)
-        return !savedAppName.isNullOrEmpty()
+        return !sharedPreferences.getString("savedAPP", null).isNullOrEmpty()
     }
 
     private fun openSavedApp() {
-        val savedApp= sharedPreferences.getString("savedAPP", null)
-        savedApp?.let {
-            openApp(it)
-        }
+        sharedPreferences.getString("savedAPP", null)?.let { openApp(it) }
     }
 
     private fun openInstalledAppsFragment() {
@@ -106,20 +85,17 @@ class MainActivity : FragmentActivity() {
             .commitNow()
     }
 
-
     private fun openApp(pkgName: String) {
         val launchIntent = packageManager.getLaunchIntentForPackage(pkgName)
-        println(pkgName)
         if (launchIntent != null) {
             startActivity(launchIntent)
         } else {
+
             val playStoreIntent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("market://details?id=$packageName")
+                Uri.parse("market://details?id=$pkgName")
             )
             startActivity(playStoreIntent)
         }
     }
-
 }
-
